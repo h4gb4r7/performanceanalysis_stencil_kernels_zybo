@@ -49,20 +49,6 @@ void init_interface(interface_t *intf, unsigned int base_address)
 	*(intf->out_size) = SIZE_X + PADDING;
 	//printf("setting out_size: %i\n", SIZE_X + PADDING);
 #endif
-#ifdef _BENCH_SINGLETASK
-	intf->local_x = (volatile int *)(base_address + 0x10);
-	intf->local_y = (volatile int *)(base_address + 0x18);
-	intf->local_z = (volatile int *)(base_address + 0x20);
-	intf->out_addr = (volatile int *)(base_address + 0x28);
-	intf->src_addr = (volatile int *)(base_address + 0x30);
-	intf->out_size = (volatile int *)(base_address + 0x38);
-	intf->block_row = (volatile int *)(base_address + 0x40);
-	intf->block_col = (volatile int *)(base_address + 0x48);
-	*(intf->local_x) = 1; // needs to be 1 for single task
-	*(intf->local_y) = 1; // needs to be 1 for single task
-	*(intf->local_z) = 1; // needs to be 1 for single task
-	*(intf->out_size) = SIZE_X + PADDING; // only quadratic matrices allowed in this implementation
-#endif
 }
 
 // set input and output buffers
@@ -76,35 +62,6 @@ void set_buffers(interface_t *intf, _DTYPE *input, _DTYPE *output)
 // TODO: maybe change logic for idle (also in poll_device)
 void kernel_exec(interface_t *intf, size_t intf_cnt)
 {
-#ifdef _BENCH_SINGLETASK
-	assert(!(SIZE_X % KERNEL_SIZE));
-	assert(!(SIZE_Y % KERNEL_SIZE));
-	/*
-	// needed for baseline single-task kernels
-	start_device(&intf[0]);
-	while (!poll_device(&intf[0]))
-			;
-	return;
-	*/
-	int jobs_x = SIZE_X / KERNEL_SIZE;
-	int jobs_y = SIZE_Y / KERNEL_SIZE;
-	int current_job = 0;
-	int job_cnt = jobs_x * jobs_y;
-
-	while (current_job < job_cnt)
-	{
-		*(intf[0].block_row) = current_job % jobs_x;
-		*(intf[0].block_col) = current_job / jobs_x;
-		start_device(&intf[0]);
-		while (!poll_device(&intf[0]))
-				;
-		current_job++;
-	}
-	
-#endif
-
-//#else
-//#error "bench type undefined"
 #ifdef _BENCH_NDRANGE_111
 	assert(!(SIZE_X % WG_SIZE_X));
 	assert(!(SIZE_Y % WG_SIZE_Y));

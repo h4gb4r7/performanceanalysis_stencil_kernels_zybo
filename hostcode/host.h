@@ -82,38 +82,6 @@ typedef struct
 	volatile int *src_addr;
 	volatile int *out_size;
 #endif
-#ifdef _BENCH_SINGLETASK
-/*
- * Single-Task Kernel interface:
- * 1 output (out) and 1 input (src) signal
- * 
- * Offsets to base address 0x43C00000
- *
- -- 0x00 : Control signals
- --        bit 0  - ap_start (Read/Write/COH)
- --        bit 1  - ap_done (Read/COR)
- --        bit 2  - ap_idle (Read)
- --        bit 3  - ap_ready (Read)
- --        bit 7  - auto_restart (Read/Write)
- --        others - reserved
- -- 0x10 : Data signal of local_size_x
- -- 0x18 : Data signal of local_size_y
- -- 0x20 : Data signal of local_size_z
- -- 0x28 : Data signal of out
- -- 0x30 : Data signal of src
- -- 0x38 : Data signal of out_size
- // 0x40 : Data signal of block_row
-// 0x48 : Data signal of block_col
- */
-	volatile int *local_x;
-	volatile int *local_y;
-	volatile int *local_z;
-	volatile int *out_addr;
-	volatile int *src_addr;
-	volatile int *out_size;
-	volatile int *block_row;
-	volatile int *block_col;
-#endif
 	//volatile int *out_radius;
 } interface_t;
 //#else

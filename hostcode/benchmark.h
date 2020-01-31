@@ -26,10 +26,6 @@
 #define BENCH_TYPE_STRING "NDRange111"
 #endif
 
-#ifdef _BENCH_SINGLETASK
-#define BENCH_TYPE_STRING "Single-Task"
-#endif
-
 #ifndef BENCH_TYPE_STRING
 #error "kernel type undefined"
 #endif

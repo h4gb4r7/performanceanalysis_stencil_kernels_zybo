@@ -51,27 +51,8 @@ unsigned int SIZE_Y_IN;
 
 const unsigned int FIXED_LEN = 4096 * 4 / sizeof(_DTYPE);
 
-const unsigned int INPUT_SIZE[][2] = {{32, 32}, {64, 64}, {128, 128}, {256, 256}, {512, 512}, {1024, 1024}, {2048, 2048}, {4096, 4096}, {8192, 8192},
-
-									  //{256, 128}, {512, 256}, {1024, 512}, {2048, 1024},
-									  //{4096, 2048}, {8192, 4096},
-
-									  {FIXED_LEN, 32},
-									  {FIXED_LEN, 64},
-									  {FIXED_LEN, 128},
-									  {FIXED_LEN, 256},
-									  {FIXED_LEN, 512},
-									  {FIXED_LEN, 1024},
-									  {FIXED_LEN, 2048},
-
-									  {32, FIXED_LEN},
-									  {64, FIXED_LEN},
-									  {128, FIXED_LEN},
-									  {256, FIXED_LEN},
-									  {512, FIXED_LEN},
-									  {1024, FIXED_LEN},
-									  {2048, FIXED_LEN}
-									};
+const unsigned int INPUT_SIZE[][2] = {{32, 32}, {64, 64}, {128, 128}, {256, 256}, 
+									{512, 512}, {1024, 1024}, {2048, 2048}, {4096, 4096}};
 
 void malloc_err(const char *msg)
 {
@@ -107,8 +88,8 @@ int main()
 		SIZE_Y = INPUT_SIZE[y][1];
 		SIZE_Y_IN = SIZE_Y + HALO;
 		if (SIZE_X * SIZE_Y * sizeof(_DTYPE) > max_ddr_capacity
-			|| (SIZE_X == SIZE_Y && y > 10) // don't measure quadratric matrix again
-			|| SIZE_X < WG_SIZE_X           // can't run workgroup on smaller input
+			|| (SIZE_X == SIZE_Y && y)
+			|| SIZE_X < WG_SIZE_X           // can't run workgroup on smaller input yet
 			|| SIZE_Y < WG_SIZE_Y)
 			continue;
 
